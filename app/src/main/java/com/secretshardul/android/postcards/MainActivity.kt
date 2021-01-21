@@ -3,6 +3,7 @@ package com.secretshardul.android.postcards
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.ContentResolver
+import android.content.Context
 import android.media.AudioAttributes
 import android.net.Uri
 import android.os.Build
@@ -10,8 +11,14 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import timber.log.Timber
-
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +39,33 @@ class MainActivity : AppCompatActivity() {
             return@setOnNavigationItemSelectedListener true
         }
         bottomNavigation.selectedItemId = R.id.navigation_postcards
+
+        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
+
+        // Save token to Firestore, if not already done
+        CoroutineScope(Dispatchers.IO).launch {
+            val savedDocumentId = sharedPref.getString(DOCUMENT_ID_KEY, null)
+            val token = Firebase.messaging.token.await()
+            if(savedDocumentId == null) {
+                try {
+                    Timber.d("Got token: $token")
+                    val usersCollection = Firebase.firestore.collection("users")
+                    val newDocumentId = usersCollection.document().id
+
+                    Timber.d("Got ID: $newDocumentId")
+                    usersCollection.document(newDocumentId).set(hashMapOf(
+                        "fcmToken" to token
+                    )).await()
+
+                    sharedPref.edit()
+                        .putString(DOCUMENT_ID_KEY, newDocumentId)
+                        .apply()
+
+                } catch (exception: Exception) {
+                    Timber.e(exception)
+                }
+            }
+        }
 
         // Notification channel with custom sound
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -69,5 +103,9 @@ class MainActivity : AppCompatActivity() {
         transaction.replace(R.id.fragment_container, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
+    }
+
+    companion object {
+        const val DOCUMENT_ID_KEY = "DOCUMENT-ID"
     }
 }

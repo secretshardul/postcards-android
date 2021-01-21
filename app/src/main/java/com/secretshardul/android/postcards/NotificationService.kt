@@ -25,12 +25,5 @@ class NotificationService: FirebaseMessagingService() {
     override fun onNewToken(newToken: String) {
         super.onNewToken(newToken)
         Timber.d("Got new token $newToken")
-
-        val notification = NotificationCompat.Builder(baseContext)
-            .setVibrate(VIBRATE_PATTERN)
-            .build()
-
-        val notificationManager = baseContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(1, notification)
     }
 }

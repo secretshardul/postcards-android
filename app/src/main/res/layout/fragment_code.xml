@@ -1,13 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".CodeFragment">
 
     <TextView
+        android:id="@+id/api_key_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Code" />
+        android:layout_height="wrap_content"
+        style="?attr/textAppearanceSubtitle1"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        android:text="API key" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/api_key"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="?attr/textAppearanceHeadline6"
+        android:layout_marginHorizontal="20dp"
+        android:text="Key here" />
+
+    <TextView
+        android:id="@+id/curl_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="?attr/textAppearanceSubtitle1"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        android:text="CURL" />
+
+
+</LinearLayout>

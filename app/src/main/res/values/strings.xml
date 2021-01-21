@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Postcards</string>
+    <string name="default_notification_channel_id">POSTCARDS_DEFAULT_CHANNEL</string>
 </resources>

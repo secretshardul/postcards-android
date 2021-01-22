@@ -3,13 +3,15 @@ package com.secretshardul.android.postcards
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import java.text.SimpleDateFormat
 import java.util.*
 
-class PostcardAdapter: RecyclerView.Adapter<PostcardAdapter.ViewHolder>() {
-    var data =  listOf<PostcardModel>()
+class PostcardAdapter : RecyclerView.Adapter<PostcardAdapter.ViewHolder>() {
+    var data = listOf<PostcardModel>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -27,18 +29,25 @@ class PostcardAdapter: RecyclerView.Adapter<PostcardAdapter.ViewHolder>() {
         return ViewHolder.from(parent)
     }
 
-    class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
+    class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val postcardTitle: TextView = itemView.findViewById(R.id.postcard_title)
         private val postcardBody: TextView = itemView.findViewById(R.id.postcard_body)
         private val postcardDate: TextView = itemView.findViewById(R.id.postcard_date)
+        private val postcardImage: ImageView = itemView.findViewById(R.id.postcard_image)
 
         fun bind(item: PostcardModel) {
             postcardTitle.text = item.title
             postcardBody.text = item.body
-            val simpleDateFormat = SimpleDateFormat("hh:mm a, dd MMM yyyy", Locale.getDefault())
-            val timeText = simpleDateFormat.format(item.time)
 
+            val simpleDateFormat = SimpleDateFormat(
+                "hh:mm a, dd MMM yyyy", Locale.getDefault()
+            )
+            val timeText = simpleDateFormat.format(item.time)
             postcardDate.text = timeText
+
+            item.imageUrl?.let {
+                Glide.with(itemView).load(it).into(postcardImage)
+            }
         }
 
         companion object {

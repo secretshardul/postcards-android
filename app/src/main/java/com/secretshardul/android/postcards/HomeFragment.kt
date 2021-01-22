@@ -88,7 +88,6 @@ class HomeFragment : Fragment() {
                 val userData: UserDataModel? = value?.toObject()
                 if(userData != null) {
                     Timber.d("Postcards: ${userData.postcards}")
-                    // TODO update recycler view
                     adapter.data = userData.postcards
                 }
             }

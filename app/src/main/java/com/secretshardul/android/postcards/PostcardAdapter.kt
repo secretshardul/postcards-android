@@ -5,6 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import java.text.SimpleDateFormat
+import java.util.*
 
 class PostcardAdapter: RecyclerView.Adapter<PostcardAdapter.ViewHolder>() {
     var data =  listOf<PostcardModel>()
@@ -26,10 +28,17 @@ class PostcardAdapter: RecyclerView.Adapter<PostcardAdapter.ViewHolder>() {
     }
 
     class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val postcardTitle: TextView = itemView.findViewById(R.id.postcard_title)
+        private val postcardTitle: TextView = itemView.findViewById(R.id.postcard_title)
+        private val postcardBody: TextView = itemView.findViewById(R.id.postcard_body)
+        private val postcardDate: TextView = itemView.findViewById(R.id.postcard_date)
 
         fun bind(item: PostcardModel) {
             postcardTitle.text = item.title
+            postcardBody.text = item.body
+            val simpleDateFormat = SimpleDateFormat("hh:mm a, dd MMM yyyy", Locale.getDefault())
+            val timeText = simpleDateFormat.format(item.time)
+
+            postcardDate.text = timeText
         }
 
         companion object {

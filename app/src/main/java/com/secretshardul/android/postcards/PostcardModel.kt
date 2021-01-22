@@ -8,5 +8,5 @@ data class PostcardModel(
     val title: String = "",
     val body: String = "",
     val imageUrl: String = "",
-    val time: Date? = null
+    val time: Date = Date(0)
 )

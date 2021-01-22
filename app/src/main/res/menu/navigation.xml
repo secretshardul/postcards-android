@@ -11,9 +11,4 @@
         android:icon="@drawable/ic_code"
         android:title="Code"/>
 
-    <item
-        android:id="@+id/navigation_channels"
-        android:icon="@drawable/ic_notifications"
-        android:title="Channels"/>
-
 </menu>

@@ -30,9 +30,8 @@ class MainActivity : AppCompatActivity() {
 
         bottomNavigation.setOnNavigationItemSelectedListener {
             Timber.d("New item selected: ${it.title}")
-            val fragmentToOpen = when(it.itemId) {
+            val fragmentToOpen = when (it.itemId) {
                 R.id.navigation_code_setup -> CodeFragment()
-                R.id.navigation_channels -> ChannelsFragment()
                 else -> HomeFragment()
             }
             openFragment(fragmentToOpen)
@@ -46,16 +45,18 @@ class MainActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             val savedDocumentId = sharedPref.getString(DOCUMENT_ID_KEY, null)
             val token = Firebase.messaging.token.await()
-            if(savedDocumentId == null) {
+            if (savedDocumentId == null) {
                 try {
                     Timber.d("Got token: $token")
                     val usersCollection = Firebase.firestore.collection("users")
                     val newDocumentId = usersCollection.document().id
 
                     Timber.d("Got ID: $newDocumentId")
-                    usersCollection.document(newDocumentId).set(hashMapOf(
-                        "fcmToken" to token
-                    )).await()
+                    usersCollection.document(newDocumentId).set(
+                        hashMapOf(
+                            "fcmToken" to token
+                        )
+                    ).await()
 
                     sharedPref.edit()
                         .putString(DOCUMENT_ID_KEY, newDocumentId)
@@ -95,7 +96,6 @@ class MainActivity : AppCompatActivity() {
 
             Timber.d("Channel created")
         }
-
     }
 
     private fun openFragment(fragment: Fragment) {

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.ktx.firestore
@@ -21,6 +22,7 @@ import timber.log.Timber
 
 class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
+    val adapter = PostcardAdapter()
     private lateinit var userDataListenerRegistration: ListenerRegistration
 
     override fun onCreateView(
@@ -32,6 +34,8 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
+        recyclerView.adapter = adapter
 
         activity?.let { activity ->
             val usersCollection = Firebase.firestore.collection("users")
@@ -85,6 +89,7 @@ class HomeFragment : Fragment() {
                 if(userData != null) {
                     Timber.d("Postcards: ${userData.postcards}")
                     // TODO update recycler view
+                    adapter.data = userData.postcards
                 }
             }
     }

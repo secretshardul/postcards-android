@@ -39,35 +39,6 @@ class MainActivity : AppCompatActivity() {
         }
         bottomNavigation.selectedItemId = R.id.navigation_postcards
 
-        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
-
-        // Save token to Firestore, if not already done
-        CoroutineScope(Dispatchers.IO).launch {
-            val savedDocumentId = sharedPref.getString(DOCUMENT_ID_KEY, null)
-            val token = Firebase.messaging.token.await()
-            if (savedDocumentId == null) {
-                try {
-                    Timber.d("Got token: $token")
-                    val usersCollection = Firebase.firestore.collection("users")
-                    val newDocumentId = usersCollection.document().id
-
-                    Timber.d("Got ID: $newDocumentId")
-                    usersCollection.document(newDocumentId).set(
-                        hashMapOf(
-                            "fcmToken" to token
-                        )
-                    ).await()
-
-                    sharedPref.edit()
-                        .putString(DOCUMENT_ID_KEY, newDocumentId)
-                        .apply()
-
-                } catch (exception: Exception) {
-                    Timber.e(exception)
-                }
-            }
-        }
-
         // Notification channel with custom sound
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val sound = Uri.parse(

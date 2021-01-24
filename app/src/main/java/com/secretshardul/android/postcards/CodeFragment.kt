@@ -1,15 +1,14 @@
 package com.secretshardul.android.postcards
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
+import android.app.AlertDialog
+import android.content.*
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
@@ -17,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import io.github.kbiakov.codeview.CodeView
 import io.github.kbiakov.codeview.adapters.Options
+import timber.log.Timber
 
 
 class CodeFragment : Fragment() {
@@ -73,8 +73,28 @@ class CodeFragment : Fragment() {
         }
 
         postmanButton.setOnClickListener {
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.postman.com/cloudy-firefly-3880/workspace/postcards-app/overview"))
+            val browserIntent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://www.postman.com/cloudy-firefly-3880/workspace/postcards-app/overview")
+            )
             startActivity(browserIntent)
+        }
+
+        emailButton.setOnClickListener {
+            val alert = AlertDialog.Builder(it.context)
+
+            alert.setTitle("Enter email")
+            alert.setMessage("API key and instructions will be sent")
+            val input = EditText(it.context)
+            alert.setView(input)
+
+            alert.setPositiveButton("Ok") { _, _ ->
+                val email = input.text
+                Timber.d("Got email $email")
+            }
+            alert.setNegativeButton("Cancel") { _, _ ->
+            }
+            alert.show()
         }
     }
 

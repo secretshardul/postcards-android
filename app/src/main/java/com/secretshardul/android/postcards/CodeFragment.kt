@@ -38,7 +38,12 @@ class CodeFragment : Fragment() {
             val savedDocumentId = sharedPref.getString(MainActivity.DOCUMENT_ID_KEY, null)
 
             apiKeyView.text = savedDocumentId
-            codeView.setCode("curl -X POST https://app.com \\\n\t--d 'key:${savedDocumentId}'")
+            val curlCode = "curl -G -X  POST 'https://postcards-api-notifications.web.app/api'\\\n" +
+                    "\t--data-urlencode 'key=${savedDocumentId}'\\\n" +
+                    "\t--data-urlencode 'title=hello world'\\\n" +
+                    "\t--data-urlencode 'body=hello frompostcards'\\\n" +
+                    "\t--data-urlencode 'imageUrl=https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Cat_poster_1.jpg/260px-Cat_poster_1.jpg' # optional"
+            codeView.setCode(curlCode)
         }
 
     }

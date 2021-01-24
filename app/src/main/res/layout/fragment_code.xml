@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="API key"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,6 +31,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/api_key_title" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/copy_key_button"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/api_key"
+        app:layout_constraintStart_toStartOf="@id/api_key"
+        android:layout_marginTop="5dp"
+        android:text="copy key" />
+
     <TextView
         android:id="@+id/curl_title"
         style="?attr/textAppearanceSubtitle1"
@@ -41,17 +51,26 @@
         android:text="CURL"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/api_key" />
+        app:layout_constraintTop_toBottomOf="@+id/copy_key_button" />
 
     <io.github.kbiakov.codeview.CodeView
         android:id="@+id/code_view"
         android:layout_width="wrap_content"
-        android:layout_height="200dp"
+        android:layout_height="100dp"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/curl_title" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/copy_code_button"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/code_view"
+        app:layout_constraintStart_toStartOf="@id/copy_key_button"
+        android:text="copy code" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/postman_button_"
@@ -73,7 +92,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="20dp"
         android:drawableLeft="@drawable/ic_mail"
         android:drawableTint="@color/white"
         android:paddingHorizontal="50dp"

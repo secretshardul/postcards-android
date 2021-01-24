@@ -16,6 +16,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import io.github.kbiakov.codeview.CodeView
 import io.github.kbiakov.codeview.adapters.Options
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
@@ -62,43 +64,59 @@ class CodeFragment : Fragment() {
             copyKeyButton.setOnClickListener {
                 val clip = ClipData.newPlainText("postcards-api-key", savedDocumentId)
                 clipboard?.setPrimaryClip(clip)
-                displayCopiedTextMessage(view.context)
+                displayToast(view.context, "Copied to clipboard")
             }
 
             copyCodeButton.setOnClickListener {
                 val clip = ClipData.newPlainText("postcards-curl-code", curlCode)
                 clipboard?.setPrimaryClip(clip)
-                displayCopiedTextMessage(view.context)
+                displayToast(view.context, "Copied to clipboard")
+            }
+
+            postmanButton.setOnClickListener {
+                val browserIntent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://www.postman.com/cloudy-firefly-3880/workspace/postcards-app/overview")
+                )
+                startActivity(browserIntent)
+            }
+
+            emailButton.setOnClickListener {
+                val alert = AlertDialog.Builder(it.context)
+
+                alert.setTitle("Enter email")
+                alert.setMessage("API key and instructions will be sent")
+                val input = EditText(it.context)
+                alert.setView(input)
+
+                alert.setPositiveButton("Ok") { _, _ ->
+                    val email = input.text.toString()
+                    Timber.d("Got email $email")
+                    if(savedDocumentId != null) {
+                        MainScope().launch {
+                            try {
+                                viewModel.sendEmail(email, savedDocumentId)
+                                Timber.d("Email sent")
+                                displayToast(it.context, "Email sent")
+                            } catch (exception: Exception) {
+                                Timber.d("Failed to send mail ${exception.message}")
+                                displayToast(it.context, "Failed to send email")
+                            }
+
+                        }
+                    }
+
+                }
+                alert.setNegativeButton("Cancel") { _, _ ->
+                }
+                alert.show()
             }
         }
 
-        postmanButton.setOnClickListener {
-            val browserIntent = Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("https://www.postman.com/cloudy-firefly-3880/workspace/postcards-app/overview")
-            )
-            startActivity(browserIntent)
-        }
 
-        emailButton.setOnClickListener {
-            val alert = AlertDialog.Builder(it.context)
-
-            alert.setTitle("Enter email")
-            alert.setMessage("API key and instructions will be sent")
-            val input = EditText(it.context)
-            alert.setView(input)
-
-            alert.setPositiveButton("Ok") { _, _ ->
-                val email = input.text
-                Timber.d("Got email $email")
-            }
-            alert.setNegativeButton("Cancel") { _, _ ->
-            }
-            alert.show()
-        }
     }
 
-    private fun displayCopiedTextMessage(context: Context) {
-        Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show()
+    private fun displayToast(context: Context, message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 }

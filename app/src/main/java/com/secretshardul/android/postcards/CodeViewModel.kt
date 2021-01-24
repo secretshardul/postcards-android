@@ -3,5 +3,7 @@ package com.secretshardul.android.postcards
 import androidx.lifecycle.ViewModel
 
 class CodeViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+    private val repository = Repository()
+
+    suspend fun sendEmail(email: String, key: String) = repository.sendEmail(email, key)
 }

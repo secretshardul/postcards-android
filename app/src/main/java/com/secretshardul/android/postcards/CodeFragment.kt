@@ -3,6 +3,8 @@ package com.secretshardul.android.postcards
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,6 +36,8 @@ class CodeFragment : Fragment() {
         val codeView: CodeView = view.findViewById(R.id.code_view)
         val copyCodeButton: Button = view.findViewById(R.id.copy_code_button)
         val copyKeyButton: Button = view.findViewById(R.id.copy_key_button)
+        val postmanButton: Button = view.findViewById(R.id.postman_button)
+        val emailButton: Button = view.findViewById(R.id.email_button)
 
         codeView.setOptions(
             Options.Default.get(view.context)
@@ -66,6 +70,11 @@ class CodeFragment : Fragment() {
                 clipboard?.setPrimaryClip(clip)
                 displayCopiedTextMessage(view.context)
             }
+        }
+
+        postmanButton.setOnClickListener {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.postman.com/cloudy-firefly-3880/workspace/postcards-app/overview"))
+            startActivity(browserIntent)
         }
     }
 
